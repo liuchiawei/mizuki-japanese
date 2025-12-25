@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 /**
  * 予約ページ
  * 日付と時間を選択して予約
  */
 
-import { motion } from 'motion/react';
-import Link from 'next/link';
-import { BookingCalendar } from '@/components/booking-calendar';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Info, Clock, AlertCircle } from 'lucide-react';
-import { BOOKING_RULES, LESSON_DURATION_MINUTES } from '@/lib/constants';
+import { motion } from "motion/react";
+import Link from "next/link";
+import { BookingCalendar } from "@/components/booking-calendar";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Calendar, Info, Clock, AlertCircle } from "lucide-react";
+import { BOOKING_RULES, LESSON_DURATION_MINUTES } from "@/lib/constants";
 
 export default function BookingPage() {
   return (
@@ -20,9 +20,14 @@ export default function BookingPage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🌸</span>
-            <span className="font-serif text-xl font-semibold text-primary">Mizuki</span>
+            <span className="font-serif text-xl font-semibold text-primary">
+              Mizuki
+            </span>
           </Link>
-          <Link href="/manage" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            href="/manage"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             查詢預約
           </Link>
         </div>
@@ -116,4 +121,3 @@ export default function BookingPage() {
     </div>
   );
 }
-

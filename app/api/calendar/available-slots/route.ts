@@ -3,24 +3,28 @@
  * GET /api/calendar/available-slots?date=2024-01-15
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getAvailableSlots } from '@/lib/google-calendar';
-import { formatForTimezone } from '@/lib/timezone';
-import { TEACHER_TIMEZONE, DEFAULT_STUDENT_TIMEZONE } from '@/lib/constants';
-import { isBookingTimeValid } from '@/lib/booking';
-import { startOfDay, parseISO, isValid } from 'date-fns';
-import { fromZonedTime } from 'date-fns-tz';
+import { NextRequest, NextResponse } from "next/server";
+import { getAvailableSlots } from "@/lib/google-calendar";
+import { formatForTimezone } from "@/lib/timezone";
+import { TEACHER_TIMEZONE, DEFAULT_STUDENT_TIMEZONE } from "@/lib/constants";
+import { isBookingTimeValid } from "@/lib/booking";
+import { startOfDay, parseISO, isValid } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const dateParam = searchParams.get('date');
-    const studentTimezone = searchParams.get('timezone') || DEFAULT_STUDENT_TIMEZONE;
+    const dateParam = searchParams.get("date");
+    const studentTimezone =
+      searchParams.get("timezone") || DEFAULT_STUDENT_TIMEZONE;
 
     // 日付パラメータの検証
     if (!dateParam) {
       return NextResponse.json(
-        { success: false, error: { code: 'INVALID_INPUT', message: '請提供日期參數' } },
+        {
+          success: false,
+          error: { code: "INVALID_INPUT", message: "請提供日期參數" },
+        },
         { status: 400 }
       );
     }
@@ -29,7 +33,13 @@ export async function GET(request: NextRequest) {
     const parsedDate = parseISO(dateParam);
     if (!isValid(parsedDate)) {
       return NextResponse.json(
-        { success: false, error: { code: 'INVALID_INPUT', message: '無效的日期格式，請使用 YYYY-MM-DD' } },
+        {
+          success: false,
+          error: {
+            code: "INVALID_INPUT",
+            message: "無效的日期格式，請使用 YYYY-MM-DD",
+          },
+        },
         { status: 400 }
       );
     }
@@ -48,10 +58,26 @@ export async function GET(request: NextRequest) {
       })
       .map((slot) => ({
         ...slot,
-        teacherTime: formatForTimezone(slot.startTime, TEACHER_TIMEZONE, 'HH:mm'),
-        studentTime: formatForTimezone(slot.startTime, studentTimezone, 'HH:mm'),
-        displayTeacher: `${formatForTimezone(slot.startTime, TEACHER_TIMEZONE, 'HH:mm')} - ${formatForTimezone(slot.endTime, TEACHER_TIMEZONE, 'HH:mm')}`,
-        displayStudent: `${formatForTimezone(slot.startTime, studentTimezone, 'HH:mm')} - ${formatForTimezone(slot.endTime, studentTimezone, 'HH:mm')}`,
+        teacherTime: formatForTimezone(
+          slot.startTime,
+          TEACHER_TIMEZONE,
+          "HH:mm"
+        ),
+        studentTime: formatForTimezone(
+          slot.startTime,
+          studentTimezone,
+          "HH:mm"
+        ),
+        displayTeacher: `${formatForTimezone(
+          slot.startTime,
+          TEACHER_TIMEZONE,
+          "HH:mm"
+        )} - ${formatForTimezone(slot.endTime, TEACHER_TIMEZONE, "HH:mm")}`,
+        displayStudent: `${formatForTimezone(
+          slot.startTime,
+          studentTimezone,
+          "HH:mm"
+        )} - ${formatForTimezone(slot.endTime, studentTimezone, "HH:mm")}`,
       }));
 
     return NextResponse.json({
@@ -62,11 +88,13 @@ export async function GET(request: NextRequest) {
       slots: formattedSlots,
     });
   } catch (error) {
-    console.error('Error fetching available slots:', error);
+    console.error("Error fetching available slots:", error);
     return NextResponse.json(
-      { success: false, error: { code: 'INTERNAL_ERROR', message: '取得可用時段時發生錯誤' } },
+      {
+        success: false,
+        error: { code: "INTERNAL_ERROR", message: "取得可用時段時發生錯誤" },
+      },
       { status: 500 }
     );
   }
 }
-

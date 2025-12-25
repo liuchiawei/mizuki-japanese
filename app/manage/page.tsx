@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
 /**
  * 予約管理ページ
  * 予約の照会・変更・キャンセル
  */
 
-import { motion } from 'motion/react';
-import Link from 'next/link';
-import { ManageBooking } from '@/components/manage-booking';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Info } from 'lucide-react';
-import { BOOKING_RULES } from '@/lib/constants';
+import { motion } from "motion/react";
+import Link from "next/link";
+import { ManageBooking } from "@/components/manage-booking";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Settings, Info } from "lucide-react";
+import { BOOKING_RULES } from "@/lib/constants";
 
 export default function ManagePage() {
   return (
@@ -20,12 +20,12 @@ export default function ManagePage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🌸</span>
-            <span className="font-serif text-xl font-semibold text-primary">Mizuki</span>
+            <span className="font-serif text-xl font-semibold text-primary">
+              Mizuki
+            </span>
           </Link>
           <Button asChild size="sm">
-            <Link href="/booking">
-              預約課程
-            </Link>
+            <Link href="/booking">預約課程</Link>
           </Button>
         </div>
       </nav>
@@ -72,9 +72,17 @@ export default function ManagePage() {
               <div className="space-y-2 text-sm">
                 <p className="font-medium text-foreground">注意事項</p>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• 課程開始前 {BOOKING_RULES.cancelDeadlineHours} 小時內無法取消</li>
-                  <li>• 課程開始前 {BOOKING_RULES.modifyDeadlineHours} 小時內無法修改時間</li>
-                  <li>• 每次預約最多可修改 {BOOKING_RULES.maxModifications} 次</li>
+                  <li>
+                    • 課程開始前 {BOOKING_RULES.cancelDeadlineHours}{" "}
+                    小時內無法取消
+                  </li>
+                  <li>
+                    • 課程開始前 {BOOKING_RULES.modifyDeadlineHours}{" "}
+                    小時內無法修改時間
+                  </li>
+                  <li>
+                    • 每次預約最多可修改 {BOOKING_RULES.maxModifications} 次
+                  </li>
                 </ul>
               </div>
             </div>
@@ -109,4 +117,3 @@ export default function ManagePage() {
     </div>
   );
 }
-
