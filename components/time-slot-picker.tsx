@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
 /**
  * 時間枠選択コンポーネント
  * 指定日の利用可能な時間枠を表示し、選択を処理
  */
 
-import { motion } from 'motion/react';
-import { cn } from '@/lib/utils';
-import { Clock, Loader2 } from 'lucide-react';
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+import { Clock, Loader2 } from "lucide-react";
 
 interface TimeSlot {
   startTimeISO: string;
@@ -56,7 +56,7 @@ export function TimeSlotPicker({
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {slots.map((slot, index) => {
         const isSelected = selectedSlot?.startTimeISO === slot.startTimeISO;
-        
+
         return (
           <motion.button
             key={slot.startTimeISO}
@@ -65,33 +65,33 @@ export function TimeSlotPicker({
             transition={{ delay: index * 0.05 }}
             onClick={() => onSelectSlot(slot)}
             className={cn(
-              'relative p-4 rounded-xl border-2 transition-all duration-200',
-              'hover:border-primary hover:shadow-md',
-              'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+              "relative p-4 rounded-xl border-2 transition-all duration-200",
+              "hover:border-primary hover:shadow-md",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
               isSelected
-                ? 'border-primary bg-primary/10 shadow-md'
-                : 'border-border bg-card hover:bg-accent/30'
+                ? "border-primary bg-primary/10 shadow-md"
+                : "border-border bg-card hover:bg-accent/30"
             )}
           >
             {/* 学生の時間（メイン表示） */}
             <div className="text-lg font-semibold text-foreground">
               {slot.studentTime}
             </div>
-            
+
             {/* 老師の時間（サブ表示） */}
             {showTeacherTime && (
               <div className="text-xs text-muted-foreground mt-1">
                 老師: {slot.teacherTime}
               </div>
             )}
-            
+
             {/* 選択インジケーター */}
             {isSelected && (
               <motion.div
                 layoutId="selected-indicator"
                 className="absolute top-2 right-2 w-3 h-3 rounded-full bg-primary"
                 initial={false}
-                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}
           </motion.button>
@@ -100,4 +100,3 @@ export function TimeSlotPicker({
     </div>
   );
 }
-

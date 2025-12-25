@@ -1,27 +1,36 @@
-'use client';
+"use client";
 
 /**
  * 予約フォームコンポーネント
  * 学生情報の入力と予約送信を処理
  */
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'motion/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { bookingFormSchema, type BookingFormData } from '@/lib/booking';
-import { Loader2, CheckCircle2, AlertCircle, Calendar, Clock, User, Mail, MessageSquare } from 'lucide-react';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import { bookingFormSchema, type BookingFormData } from "@/lib/booking";
+import {
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Calendar,
+  Clock,
+  User,
+  Mail,
+  MessageSquare,
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface TimeSlot {
   startTimeISO: string;
@@ -57,17 +66,20 @@ export function BookingForm({
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
-      studentName: '',
-      studentEmail: '',
+      studentName: "",
+      studentEmail: "",
       studentTimezone,
-      startTimeISO: selectedSlot?.startTimeISO || '',
-      note: '',
+      startTimeISO: selectedSlot?.startTimeISO || "",
+      note: "",
     },
   });
 
   // スロットが変更されたらフォームを更新
-  if (selectedSlot && form.getValues('startTimeISO') !== selectedSlot.startTimeISO) {
-    form.setValue('startTimeISO', selectedSlot.startTimeISO);
+  if (
+    selectedSlot &&
+    form.getValues("startTimeISO") !== selectedSlot.startTimeISO
+  ) {
+    form.setValue("startTimeISO", selectedSlot.startTimeISO);
   }
 
   const onSubmit = async (data: BookingFormData) => {
@@ -75,9 +87,9 @@ export function BookingForm({
     setBookingResult(null);
 
     try {
-      const response = await fetch('/api/calendar/book', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/calendar/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -89,21 +101,21 @@ export function BookingForm({
           bookingId: result.bookingId,
           message: result.message,
         });
-        toast.success('預約成功！');
+        toast.success("預約成功！");
         onBookingSuccess(result.bookingId);
       } else {
         setBookingResult({
           success: false,
-          message: result.error?.message || '預約失敗，請稍後再試',
+          message: result.error?.message || "預約失敗，請稍後再試",
         });
-        toast.error(result.error?.message || '預約失敗');
+        toast.error(result.error?.message || "預約失敗");
       }
     } catch {
       setBookingResult({
         success: false,
-        message: '網路錯誤，請檢查網路連線後再試',
+        message: "網路錯誤，請檢查網路連線後再試",
       });
-      toast.error('網路錯誤');
+      toast.error("網路錯誤");
     } finally {
       setIsSubmitting(false);
     }
@@ -121,11 +133,11 @@ export function BookingForm({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('zh-TW', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long',
+    return date.toLocaleDateString("zh-TW", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
     });
   };
 
@@ -137,9 +149,7 @@ export function BookingForm({
             <Calendar className="h-5 w-5 text-primary" />
             預約日語課程
           </DialogTitle>
-          <DialogDescription>
-            請填寫您的資料以完成預約
-          </DialogDescription>
+          <DialogDescription>請填寫您的資料以完成預約</DialogDescription>
         </DialogHeader>
 
         {/* 結果表示 */}
@@ -154,7 +164,7 @@ export function BookingForm({
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
                 >
                   <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
                 </motion.div>
@@ -186,7 +196,10 @@ export function BookingForm({
                 <p className="text-muted-foreground mb-4">
                   {bookingResult.message}
                 </p>
-                <Button onClick={() => setBookingResult(null)} variant="outline">
+                <Button
+                  onClick={() => setBookingResult(null)}
+                  variant="outline"
+                >
                   重新填寫
                 </Button>
               </div>
@@ -204,7 +217,9 @@ export function BookingForm({
                 <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
                   <Clock className="h-4 w-4 text-primary" />
                   {selectedSlot.displayStudent}
-                  <span className="text-sm font-normal text-muted-foreground">(台北時間)</span>
+                  <span className="text-sm font-normal text-muted-foreground">
+                    (台北時間)
+                  </span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   老師時間: {selectedSlot.displayTeacher} (東京時間)
@@ -221,7 +236,7 @@ export function BookingForm({
               <Input
                 id="studentName"
                 placeholder="請輸入您的姓名"
-                {...form.register('studentName')}
+                {...form.register("studentName")}
                 disabled={isSubmitting}
               />
               {form.formState.errors.studentName && (
@@ -241,7 +256,7 @@ export function BookingForm({
                 id="studentEmail"
                 type="email"
                 placeholder="your@email.com"
-                {...form.register('studentEmail')}
+                {...form.register("studentEmail")}
                 disabled={isSubmitting}
               />
               {form.formState.errors.studentEmail && (
@@ -255,12 +270,13 @@ export function BookingForm({
             <div className="space-y-2">
               <Label htmlFor="note" className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
-                備註 <span className="text-muted-foreground text-xs">(選填)</span>
+                備註{" "}
+                <span className="text-muted-foreground text-xs">(選填)</span>
               </Label>
               <Input
                 id="note"
                 placeholder="想學習的內容、程度等..."
-                {...form.register('note')}
+                {...form.register("note")}
                 disabled={isSubmitting}
               />
             </div>
@@ -287,7 +303,7 @@ export function BookingForm({
                     預約中...
                   </>
                 ) : (
-                  '確認預約'
+                  "確認預約"
                 )}
               </Button>
             </div>
@@ -297,4 +313,3 @@ export function BookingForm({
     </Dialog>
   );
 }
-
