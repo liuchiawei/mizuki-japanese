@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mizuki 日語教室 | 線上日語課程預約",
-  description: "與專業日語老師 Mizuki 一起學習日語。線上預約一對一日語課程，提供初級到高級的客製化教學。",
+  description:
+    "與專業日語老師 Mizuki 一起學習日語。線上預約一對一日語課程，提供初級到高級的客製化教學。",
   keywords: ["日語", "日文", "日語學習", "線上日語", "日語老師", "Mizuki"],
 };
 
