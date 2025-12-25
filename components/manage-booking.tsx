@@ -1,18 +1,24 @@
-'use client';
+"use client";
 
 /**
  * 予約管理コンポーネント
  * 予約の照会・変更・キャンセルを処理
  */
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion, AnimatePresence } from 'motion/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,8 +26,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { bookingQuerySchema, type BookingQueryData } from '@/lib/booking';
+} from "@/components/ui/dialog";
+import { bookingQuerySchema, type BookingQueryData } from "@/lib/booking";
 import {
   Search,
   Loader2,
@@ -34,8 +40,8 @@ import {
   Edit,
   Trash2,
   MessageSquare,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface BookingDetails {
   bookingId: string;
@@ -58,8 +64,8 @@ export function ManageBooking() {
   const [isLoading, setIsLoading] = useState(false);
   const [booking, setBooking] = useState<BookingDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
-  
+  const [email, setEmail] = useState("");
+
   // キャンセル確認ダイアログ
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
@@ -68,8 +74,8 @@ export function ManageBooking() {
   const form = useForm<BookingQueryData>({
     resolver: zodResolver(bookingQuerySchema),
     defaultValues: {
-      bookingId: '',
-      email: '',
+      bookingId: "",
+      email: "",
     },
   });
 
@@ -81,17 +87,19 @@ export function ManageBooking() {
 
     try {
       const response = await fetch(
-        `/api/calendar/booking/${data.bookingId}?email=${encodeURIComponent(data.email)}`
+        `/api/calendar/booking/${data.bookingId}?email=${encodeURIComponent(
+          data.email
+        )}`
       );
       const result = await response.json();
 
       if (result.success) {
         setBooking(result.booking);
       } else {
-        setError(result.error?.message || '查詢失敗');
+        setError(result.error?.message || "查詢失敗");
       }
     } catch {
-      setError('網路錯誤，請稍後再試');
+      setError("網路錯誤，請稍後再試");
     } finally {
       setIsLoading(false);
     }
@@ -99,24 +107,27 @@ export function ManageBooking() {
 
   const handleCancel = async () => {
     if (!booking) return;
-    
+
     setIsCanceling(true);
     try {
-      const response = await fetch(`/api/calendar/booking/${booking.bookingId}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(
+        `/api/calendar/booking/${booking.bookingId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
       const result = await response.json();
 
       if (result.success) {
         setCancelSuccess(true);
-        toast.success('預約已取消');
+        toast.success("預約已取消");
       } else {
-        toast.error(result.error?.message || '取消失敗');
+        toast.error(result.error?.message || "取消失敗");
       }
     } catch {
-      toast.error('網路錯誤');
+      toast.error("網路錯誤");
     } finally {
       setIsCanceling(false);
       setShowCancelDialog(false);
@@ -151,7 +162,7 @@ export function ManageBooking() {
                 <Input
                   id="bookingId"
                   placeholder="MZK-20231225-ABC123"
-                  {...form.register('bookingId')}
+                  {...form.register("bookingId")}
                   disabled={isLoading}
                 />
                 {form.formState.errors.bookingId && (
@@ -166,7 +177,7 @@ export function ManageBooking() {
                   id="queryEmail"
                   type="email"
                   placeholder="your@email.com"
-                  {...form.register('email')}
+                  {...form.register("email")}
                   disabled={isLoading}
                 />
                 {form.formState.errors.email && (
@@ -176,7 +187,11 @@ export function ManageBooking() {
                 )}
               </div>
             </div>
-            <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full sm:w-auto"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -305,7 +320,7 @@ export function ManageBooking() {
                     variant="outline"
                     disabled={!booking.canModify}
                     className="flex-1"
-                    onClick={() => toast.info('修改功能開發中')}
+                    onClick={() => toast.info("修改功能開發中")}
                   >
                     <Edit className="mr-2 h-4 w-4" />
                     修改時間
@@ -371,7 +386,7 @@ export function ManageBooking() {
                   取消中...
                 </>
               ) : (
-                '確認取消'
+                "確認取消"
               )}
             </Button>
           </DialogFooter>
@@ -380,4 +395,3 @@ export function ManageBooking() {
     </div>
   );
 }
-

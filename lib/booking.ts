@@ -20,7 +20,7 @@ export const bookingFormSchema = z.object({
     .email('請輸入有效的 Email'),
   studentTimezone: z
     .string()
-    .default('Asia/Taipei'),
+    .min(1, '請選擇時區'),
   startTimeISO: z
     .string()
     .datetime('無效的時間格式'),
