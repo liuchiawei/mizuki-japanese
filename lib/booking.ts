@@ -3,31 +3,19 @@
  * 予約に関するビジネスルールを定義
  */
 
-import { z } from 'zod';
-import { addHours, addDays, isBefore, isAfter } from 'date-fns';
-import { BOOKING_RULES, LESSON_DURATION_MINUTES } from './constants';
+import { z } from "zod";
+import { addHours, addDays, isBefore, isAfter } from "date-fns";
+import { BOOKING_RULES, LESSON_DURATION_MINUTES } from "./constants";
 
 /**
  * 予約フォームのバリデーションスキーマ
  */
 export const bookingFormSchema = z.object({
-  studentName: z
-    .string()
-    .min(1, '請輸入姓名')
-    .max(50, '姓名不能超過 50 字'),
-  studentEmail: z
-    .string()
-    .email('請輸入有效的 Email'),
-  studentTimezone: z
-    .string()
-    .min(1, '請選擇時區'),
-  startTimeISO: z
-    .string()
-    .datetime('無效的時間格式'),
-  note: z
-    .string()
-    .max(500, '備註不能超過 500 字')
-    .optional(),
+  studentName: z.string().min(1, "請輸入姓名").max(50, "姓名不能超過 50 字"),
+  studentEmail: z.string().email("請輸入有效的 Email"),
+  studentTimezone: z.string().min(1, "請選擇時區"),
+  startTimeISO: z.string().datetime("無效的時間格式"),
+  note: z.string().max(500, "備註不能超過 500 字").optional(),
 });
 
 export type BookingFormData = z.infer<typeof bookingFormSchema>;
@@ -36,12 +24,8 @@ export type BookingFormData = z.infer<typeof bookingFormSchema>;
  * 查詢/修改/取消預約的驗證スキーマ
  */
 export const bookingQuerySchema = z.object({
-  bookingId: z
-    .string()
-    .regex(/^MZK-\d{8}-[A-Z0-9]{6}$/, '無效的預約編號格式'),
-  email: z
-    .string()
-    .email('請輸入有效的 Email'),
+  bookingId: z.string().regex(/^MZK-\d{8}-[A-Z0-9]{6}$/, "無效的預約編號格式"),
+  email: z.string().email("請輸入有效的 Email"),
 });
 
 export type BookingQueryData = z.infer<typeof bookingQuerySchema>;
@@ -50,15 +34,9 @@ export type BookingQueryData = z.infer<typeof bookingQuerySchema>;
  * 修改預約的驗證スキーマ
  */
 export const modifyBookingSchema = z.object({
-  bookingId: z
-    .string()
-    .regex(/^MZK-\d{8}-[A-Z0-9]{6}$/, '無效的預約編號格式'),
-  email: z
-    .string()
-    .email('請輸入有效的 Email'),
-  newStartTimeISO: z
-    .string()
-    .datetime('無效的時間格式'),
+  bookingId: z.string().regex(/^MZK-\d{8}-[A-Z0-9]{6}$/, "無效的預約編號格式"),
+  email: z.string().email("請輸入有效的 Email"),
+  newStartTimeISO: z.string().datetime("無效的時間格式"),
 });
 
 export type ModifyBookingData = z.infer<typeof modifyBookingSchema>;
@@ -71,7 +49,7 @@ export function isBookingTimeValid(startTime: Date): {
   error?: string;
 } {
   const now = new Date();
-  
+
   // 檢查是否超過最小提前預約時間
   const minBookingTime = addHours(now, BOOKING_RULES.minAdvanceBookingHours);
   if (isBefore(startTime, minBookingTime)) {
@@ -101,7 +79,10 @@ export function canCancelBooking(lessonStartTime: Date): {
   error?: string;
 } {
   const now = new Date();
-  const cancelDeadline = addHours(lessonStartTime, -BOOKING_RULES.cancelDeadlineHours);
+  const cancelDeadline = addHours(
+    lessonStartTime,
+    -BOOKING_RULES.cancelDeadlineHours
+  );
 
   if (isAfter(now, cancelDeadline)) {
     return {
@@ -124,7 +105,10 @@ export function canModifyBooking(
   error?: string;
 } {
   const now = new Date();
-  const modifyDeadline = addHours(lessonStartTime, -BOOKING_RULES.modifyDeadlineHours);
+  const modifyDeadline = addHours(
+    lessonStartTime,
+    -BOOKING_RULES.modifyDeadlineHours
+  );
 
   // 檢查修改次數
   if (currentModificationCount >= BOOKING_RULES.maxModifications) {
@@ -156,13 +140,13 @@ export function calculateEndTime(startTime: Date): Date {
  * API 錯誤回應類型
  */
 export type BookingErrorCode =
-  | 'INVALID_INPUT'
-  | 'SLOT_TAKEN'
-  | 'BOOKING_NOT_FOUND'
-  | 'EMAIL_MISMATCH'
-  | 'CANNOT_CANCEL'
-  | 'CANNOT_MODIFY'
-  | 'INTERNAL_ERROR';
+  | "INVALID_INPUT"
+  | "SLOT_TAKEN"
+  | "BOOKING_NOT_FOUND"
+  | "EMAIL_MISMATCH"
+  | "CANNOT_CANCEL"
+  | "CANNOT_MODIFY"
+  | "INTERNAL_ERROR";
 
 export interface BookingError {
   code: BookingErrorCode;
@@ -198,4 +182,3 @@ export interface BookingErrorResponse {
 }
 
 export type BookingResponse = BookingSuccessResponse | BookingErrorResponse;
-
