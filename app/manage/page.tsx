@@ -15,21 +15,6 @@ import { BOOKING_RULES } from "@/lib/constants";
 export default function ManagePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted/30 to-background">
-      {/* ナビゲーション */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🌸</span>
-            <span className="font-serif text-xl font-semibold text-primary">
-              Mizuki
-            </span>
-          </Link>
-          <Button asChild size="sm">
-            <Link href="/booking">預約課程</Link>
-          </Button>
-        </div>
-      </nav>
-
       <div className="container mx-auto px-4 py-8">
         {/* 戻るボタン */}
         <motion.div

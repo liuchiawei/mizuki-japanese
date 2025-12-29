@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "title": "Mizuki 日語教室",
+    "links": {
+      "booking": "預約課程",
+      "manage": "查詢預約"
+    }
+  },
+  "hero": {
+    "title": "Mizuki 日語教室",
+    "subtitle": "線上一對一日語教學",
+    "catchcopy": "和 Mizuki 老師一起學日語",
+    "description": "從基礎五十音到商務日語，依照您的程度和目標， 提供客製化的一對一線上課程。",
+    "links": {
+      "booking": "預約課程",
+      "about": "了解更多"
+    }
+  },
+  "footer": {
+    "title": "Mizuki 日語教室",
+    "links": {
+      "booking": "預約課程",
+      "manage": "查詢預約"
+    },
+    "copyright": "© 2025 Mizuki Japanese. All rights reserved."
+  }
+}
